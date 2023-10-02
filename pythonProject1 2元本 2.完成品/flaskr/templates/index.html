@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>sapu-app</title> 
+    
+    <link rel="stylesheet" href="{{  url_for('static', filename='style.css')  }}">
+</head>
+
+<body>
+
+    <h1>書店</h1>
+    <h2>今月の新刊一覧</h2>
+    {% if books == [] %}
+    <p>今月の新刊情報はまだありません</p>
+    {% else %}
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>入荷日</th>
+            <th>タイトル</th>
+            <th>金額</th>
+            <th>削除</th>
+        </tr>
+
+        {% for book in books %}
+        <tr>
+            <td>{{ book.id }}</td>
+            <td>{{ book.arrival_day }}</td>
+            <td>{{ book.title }}</td>
+            <td>{{ book.price }}円</td>
+            <td>
+                <a href="{{ url_for('delete', id=book.id) }}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+    
+    <a href= "{{ url_for('form') }}">編集</a>
+
+
+
+<!-- データベースの id カラムを表示する列を追加（必須ではありませんが動作をわかりやすくするため） -->
+<!-- 削除リンクに、コントローラ（main.py）から受け取った id をつける　→　このようにすることで、削除リンククリック時に書籍IDを delete.html に渡すことが可能に -->
+
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Price</th>
+                <th>Arrival Day</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+                <tr>
+                    <td>{{ book["title"] }}</td>
+                    <td>{{ book["price"] }}</td>
+                    <td>{{ book["arrival_day"] }}</td>
+                    <td>
+                        <a href="{{ url_for('delete', id=loop.index) }}">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+
+
+
+    
+</body>
+
+</html>
